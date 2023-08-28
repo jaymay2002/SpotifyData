@@ -1,0 +1,19 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+#song-select {
+    display: block;
+    margin: 20px auto;
+}
+
+#plot-container {
+    text-align: center;
+    margin-top: 20px;
+}

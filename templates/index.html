@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>My Song Website</title>
+</head>
+<body>
+    <header>
+        <h1>Interactive Song Data Visualization</h1>
+    </header>
+    
+    <main>
+        
+        <section class="song-selection">
+            <input type="text" id="song-input" placeholder="Enter Song Name">
+            <button id="fetch-song-button">Fetch Song Data</button>
+        </section>
+
+        <section class="graph-container">
+            <h2>Graph</h2>
+            <img id="graph-image" src="" alt="Graph">
+        </section>
+
+        <section class="table-container">
+            <h2>Top Songs</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Data will be populated here -->
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+    
+    <footer>
+    </footer>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Button click event handler
+            $('#fetch-song-button').click(function() {
+                var songName = $('#song-input').val();
+                fetchAndPopulateData(songName);
+            });
+
+            // Fetch data function
+            function fetchAndPopulateData(songName) {
+                $.get('/fetch_data', { song: songName }, function(data) {
+                    populateTable(data);
+                    updateGraph();  // Update the graph image
+                });
+            }
+
+            // Function to update the graph image
+            function updateGraph() {
+                var timestamp = new Date().getTime(); // Get current timestamp
+                var graphImagePath = "static/graph.png" + "?t=" + timestamp; // Append timestamp as query parameter
+                $('#graph-image').attr('src', graphImagePath);  // Update the 'src' attribute
+            }
+
+            // Function to populate table (similar to your existing populateTable function)
+            function populateTable(data) {
+                var tableBody = $('#table-body');  // Assuming you have a <tbody> element with id 'table-body'
+                console.log(data);
+
+                // Clear the previous table data
+                tableBody.empty();
+
+                $.each(data, function(date, count) {
+                    var row = '<tr><td>' + date + '</td><td>' + count + '</td></tr>';
+                    tableBody.append(row);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
